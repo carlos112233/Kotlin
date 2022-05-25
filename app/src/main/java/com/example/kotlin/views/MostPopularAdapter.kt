@@ -11,9 +11,10 @@ import com.example.kotlin.models.PlayingNow
 import kotlinx.android.synthetic.main.playing_now.view.*
 
 class MostPopularAdapter (
-    private val mostpupalar : List<MostPupalar>
-):RecyclerView.Adapter<MostPopularAdapter.MovieViewHolder>(){
-    class MovieViewHolder(view : View) : RecyclerView.ViewHolder(view){
+    private val mostpupalar : List<MostPupalar>,
+    private val listener:  OnItemClickListener
+):RecyclerView.Adapter<MostPopularAdapter.MostPopularViewHolder>(){
+    inner class MostPopularViewHolder(view : View) : RecyclerView.ViewHolder(view), View.OnClickListener{
         private val IMAGE_BASE = "https://image.tmdb.org/t/p/w500/"
         fun bindMovie(mostpupalars : MostPupalar){
             itemView.titulo.text = mostpupalars.titulo
@@ -22,17 +23,31 @@ class MostPopularAdapter (
 
             Glide.with(itemView).load(IMAGE_BASE + mostpupalars.img).into(itemView.img)
         }
+
+        init {
+            itemView.setOnClickListener(this)
+        }
+        override fun onClick(p0: View?) {
+            val position = adapterPosition
+            if (position != RecyclerView.NO_POSITION){
+                listener.OnItemClick(position)
+            }
+        }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
-        return MovieViewHolder(
+    interface  OnItemClickListener{
+        fun OnItemClick(position: Int)
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MostPopularViewHolder {
+        return MostPopularViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.most_popular, parent, false)
         )
     }
 
     override fun getItemCount(): Int = mostpupalar.size
 
-    override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: MostPopularViewHolder, position: Int) {
         holder.bindMovie(mostpupalar.get(position))
     }
 }

@@ -2,6 +2,7 @@ package com.example.kotlin
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kotlin.models.*
 import com.example.kotlin.service.MostPopularApiInterface
@@ -15,19 +16,23 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.create
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), MostPopularAdapter.OnItemClickListener, PlayingNowAdapter.OnItemClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        //POPULAR
         rv_most_popular.layoutManager = LinearLayoutManager(this)
         rv_most_popular.setHasFixedSize(true)
         getMostPopular { movies : List<MostPupalar> ->
-            rv_most_popular.adapter = MostPopularAdapter(movies)
+            rv_most_popular.adapter = MostPopularAdapter(movies,this)
         }
+
+        //Playing Now
         rv_playing_now.layoutManager = LinearLayoutManager(this)
         rv_playing_now.setHasFixedSize(true)
         getPlayingNow { movies : List<PlayingNow> ->
-            rv_playing_now.adapter = PlayingNowAdapter(movies)
+            rv_playing_now.adapter = PlayingNowAdapter(movies, this)
         }
     }
 
@@ -58,5 +63,14 @@ class MainActivity : AppCompatActivity() {
             }
         })
     }
+
+
+
+    override fun OnItemClick(position: Int) {
+        Toast.makeText(this,"Item $position hizo click",Toast.LENGTH_SHORT).show()
+    }
+
+
+
 }
 
