@@ -5,7 +5,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class MovieServices {
     companion object {
-        private const val BASE_URL = "https://api.themoviedb.org"
+        public const val BASE_URL = "https://api.themoviedb.org"
         private var retrofit: Retrofit? = null
 
         fun getInstancia(): Retrofit {
